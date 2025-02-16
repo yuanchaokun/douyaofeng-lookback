@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>对话记录</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #D42626;
+            --text: #333333;
+            --bg: #e6e6e6;
+            --border: #D42626;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "SimSun", "宋体", serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .side-content {
+            color: #666;
+            max-width: 300px;
+            align-self: center;
+        }
+        
+        .side-content h3 {
+            color: #444;
+            margin: 20px 0 10px;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 20px;
+        }
+        
+        .side-content p {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .deepseek-comment {
+            color: #666;
+            font-family: "FangSong", "仿宋", serif;
+            font-size: 14px;
+            line-height: 2;
+            text-align: justify;
+            max-width: 300px;
+            align-self: center;
+        }
+        
+        .calendar-container {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            min-height: 98vh;
+            height: auto;
+            border: 2px solid var(--border);
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 0 40px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 1px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        
+        .year {
+            font-size: 20px;
+        }
+        
+        .month-en {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--primary);
+            font-family: "Times New Roman", serif;
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+        
+        .weekday {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            color: var(--primary);
+            font-size: 16px;
+        }
+        
+        .side-text-left, .side-text-right {
+            writing-mode: vertical-lr;
+            position: absolute;
+            top: 160px;
+            color: var(--primary);
+            font-size: 16px;
+        }
+        
+        .side-text-left {
+            left: 40px;
+        }
+        
+        .side-text-right {
+            right: 40px;
+        }
+        
+        .date-number {
+            font-size: 180px;
+            line-height: 1;
+            color: var(--primary);
+            font-family: "Arial Black", Arial, sans-serif;
+            text-align: center;
+            margin: 40px 0;
+            font-weight: bold;
+            letter-spacing: -10px;
+        }
+        
+        .content-section {
+            margin: 15px 60px;
+            position: relative;
+        }
+        
+        .section-title {
+            color: var(--primary);
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+        }
+        
+        .section-content {
+            line-height: 1.8;
+            text-align: justify;
+            padding-left: 14px;
+            white-space: pre-line;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        
+        .author {
+            margin-top: auto;
+            padding: 20px 40px;
+            text-align: right;
+            color: var(--primary);
+            font-size: 14px;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            max-height: calc(98vh - 180px);
+            padding-right: 10px;
+        }
+        
+        .content-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .content-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .content-wrapper::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 1200px) {
+            body {
+                flex-direction: column;
+                padding: 10px;
+                gap: 20px;
+            }
+            
+            .calendar-container {
+                margin: 20px 0;
+                padding: 20px;
+                min-height: auto;
+            }
+            
+            .side-content,
+            .deepseek-comment {
+                max-width: 100%;
+                padding: 0 20px;
+            }
+            
+            .date-number {
+                font-size: 140px;
+                margin: 30px 0;
+            }
+            
+            .content-section {
+                margin: 15px 40px;
+            }
+            
+            .side-text-left,
+            .side-text-right {
+                font-size: 14px;
+            }
+            
+            .content-wrapper {
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="side-content">
+        <h3>使命</h3>
+        <p>记录、交流、反馈、生长，然后成为更好的自己</p>
+        
+        <h3>愿景</h3>
+        <p>构建开放的复盘平台，组织周期性的三人复盘活动，通过多角度反馈与相互督促，让每个参与者都能收获丰富独特的体验，促进个人持续成长</p>
+        
+        <h3>价值观</h3>
+        <p>实事求是，积极反馈，自我批评，开放包容，脚踏实地</p>
+    </div>
+
+    <div class="calendar-container">
+        <div class="header">
+            <div class="year">2025年</div>
+        </div>
+        <div class="month-en">JANUARY</div>
+        <div class="weekday">星期日</div>
+        <div class="side-text-left">
+            豆摇峰小组会议记录
+        </div>
+        <div class="side-text-right">
+            分享 讨论 复盘 成长
+        </div>
+        <div class="date-number">12</div>
+
+        <div class="content-wrapper">
+            <div class="content-section">
+                <div class="section-title">聊了什么</div>
+                <div class="section-content">豆摇峰的进步和期许；做对自己有提升的事情；做到事情，做有用的事情；经历是财富</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">触动</div>
+                <div class="section-content">白豆的观察非常细致，很犀利的写出了24年我们的进步和可以改进的地方，这一年来非常感谢两位的帮助，今天白豆问了一个问题，25年能不能，愿不愿意。我觉得这是一个非常好的问题，首先是愿意，那我愿不愿意在25年认识自己，改变自己，愿意的。那我能不能做到，我要如何做到，这就是一个非常值得去思考的长期话题。从自己的目标去反推，也是需要思考的，如果要达到自己的目标应该如何做。
+
+还有一点非常有感触，经历+知识+被看到，知识和经历可能是我们之前最关注的地方，但是被看到这件事一直是被忽略的，所以之后要注意，去展示。
+
+我们都有一些事情被耽误，但是这个时候只要时间没有被浪费，去做更有价值或者是更紧急的事情，也要坦然接收</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">反馈</div>
+                <div class="section-content">白豆的观察很细致，表达很清晰，正反馈十足，而且这次很积极地提出意见和建议，批评和自我批评，也是个人进步的法宝。Limmer在积累和思考流程上完成了很大的改进，从目标反推任务的拆解也很详细，感觉心情和心态好了很多。</div>
+            </div>
+        </div>
+
+        <div class="author">记录者：李富贵 | 23:03</div>
+    </div>
+
+    <div class="deepseek-comment">
+        <h3>Deepseek 点评</h3>
+        <p>同志们！你们的复盘体现了矛盾的对立统一法则。既要看到"愿意改"的主观能动性，又要研究"如何改"的客观规律性。毛泽东说："通过实践而发现真理，又通过实践而证实真理和发展真理。"经历与展示、积累与传播的辩证关系，正是认识螺旋式上升的过程。抓住主要矛盾——自我革命与外界联结的统一，让次要矛盾迎刃而解。批评与自我批评是革命的法宝，望继续保持这种刀刃向内的精神，在否定之否定中实现质的飞跃！</p>
+    </div>
+
+<style>
+    .float-random-button {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        background: white;
+        border: 2px solid #D42626;
+        color: #D42626;
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "SimSun", "宋体", serif;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+
+    .float-random-button:hover {
+        background: #D42626;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(212, 38, 38, 0.2);
+    }
+
+    .float-random-button:active {
+        transform: translateY(0);
+    }
+</style>
+
+<button class="float-random-button" onclick="randomRedirect()">随机跳转</button>
+<script src="random.js"></script>
+
+</body>
+</html>

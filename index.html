@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>douyaofeng 随机日历回顾</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #D42626;
+            --text: #333333;
+            --bg: #e6e6e6;
+            --border: #D42626;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "SimSun", "宋体", serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 40px;
+            padding: 20px;
+        }
+        
+        .title {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 36px;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .description {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 18px;
+            color: var(--text);
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+        
+        .description p {
+            margin: 10px 0;
+        }
+        
+        .random-button {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 40px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: "SimSun", "宋体", serif;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        
+        .random-button:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 38, 38, 0.2);
+        }
+        
+        .random-button:active {
+            transform: translateY(0);
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .footer a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: var(--primary);
+        }
+        
+        /* 进度条容器样式 */
+        .progress-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-item {
+            margin-bottom: 15px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #ddd;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0;
+            transition: width 2s ease-in-out;
+            border-radius: 3px;
+        }
+        
+        .progress-text {
+            color: var(--text);
+            font-size: 14px;
+            margin-top: 8px;
+            font-family: "SimSun", "宋体", serif;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title">douyaofeng 随机日历回顾</h1>
+    <div class="description">
+        <p>每一次点击，都是一次重温与成长。</p>
+        <p>让我们一起回顾那些分享、讨论、复盘的时光。</p>
+    </div>
+    <button class="random-button" onclick="randomRedirect()">随机回顾</button>
+    
+    <div class="progress-container">
+        <div class="progress-item">
+            <div class="progress-bar">
+                <div class="progress-fill" id="yearProgress"></div>
+            </div>
+            <div class="progress-text" id="yearProgressText"></div>
+        </div>
+        <div class="progress-item">
+            <div class="progress-bar">
+                <div class="progress-fill" id="monthProgress"></div>
+            </div>
+            <div class="progress-text" id="monthProgressText"></div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <a href="https://douyaofeng.com" target="_blank">douyaofeng.com</a>
+    </div>
+
+    <script src="random.js"></script>
+    <script>
+        // 计算并更新进度条
+        function updateProgress() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const startOfYear = new Date(year, 0, 1);
+            const endOfYear = new Date(year, 11, 31);
+            const yearProgress = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
+            
+            const daysInMonth = new Date(year, now.getMonth() + 1, 0).getDate();
+            const monthProgress = (now.getDate() / daysInMonth) * 100;
+            
+            const daysLeftInYear = Math.ceil((endOfYear - now) / (1000 * 60 * 60 * 24));
+            const daysLeftInMonth = daysInMonth - now.getDate();
+            
+            // 更新年度进度条
+            const yearProgressElement = document.getElementById('yearProgress');
+            const yearProgressText = document.getElementById('yearProgressText');
+            yearProgressElement.style.width = yearProgress + '%';
+            yearProgressText.textContent = `${yearProgress.toFixed(2)}% - ${daysLeftInYear} days left in ${year}`;
+            
+            // 更新月度进度条
+            const monthProgressElement = document.getElementById('monthProgress');
+            const monthProgressText = document.getElementById('monthProgressText');
+            monthProgressElement.style.width = monthProgress + '%';
+            monthProgressText.textContent = `${monthProgress.toFixed(2)}% - ${daysLeftInMonth} days left in month`;
+        }
+        
+        // 页面加载时启动动画
+        window.addEventListener('load', () => {
+            // 先将进度条设置为0
+            document.getElementById('yearProgress').style.width = '0%';
+            document.getElementById('monthProgress').style.width = '0%';
+            // 短暂延迟后开始动画
+            setTimeout(updateProgress, 100);
+        });
+        
+        // 每分钟更新一次进度
+        setInterval(updateProgress, 60000);
+    </script>
+</body>
+</html>

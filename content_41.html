@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>对话记录</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #D42626;
+            --text: #333333;
+            --bg: #e6e6e6;
+            --border: #D42626;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "SimSun", "宋体", serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .side-content {
+            color: #666;
+            max-width: 300px;
+            align-self: center;
+        }
+        
+        .side-content h3 {
+            color: #444;
+            margin: 20px 0 10px;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 20px;
+        }
+        
+        .side-content p {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .deepseek-comment {
+            color: #666;
+            font-family: "FangSong", "仿宋", serif;
+            font-size: 14px;
+            line-height: 2;
+            text-align: justify;
+            max-width: 300px;
+            align-self: center;
+        }
+        
+        .calendar-container {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            min-height: 98vh;
+            height: auto;
+            border: 2px solid var(--border);
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 0 40px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 1px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        
+        .year {
+            font-size: 20px;
+        }
+        
+        .month-en {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--primary);
+            font-family: "Times New Roman", serif;
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+        
+        .weekday {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            color: var(--primary);
+            font-size: 16px;
+        }
+        
+        .side-text-left, .side-text-right {
+            writing-mode: vertical-lr;
+            position: absolute;
+            top: 160px;
+            color: var(--primary);
+            font-size: 16px;
+        }
+        
+        .side-text-left {
+            left: 40px;
+        }
+        
+        .side-text-right {
+            right: 40px;
+        }
+        
+        .date-number {
+            font-size: 180px;
+            line-height: 1;
+            color: var(--primary);
+            font-family: "Arial Black", Arial, sans-serif;
+            text-align: center;
+            margin: 40px 0;
+            font-weight: bold;
+            letter-spacing: -10px;
+        }
+        
+        .content-section {
+            margin: 15px 60px;
+            position: relative;
+        }
+        
+        .section-title {
+            color: var(--primary);
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+        }
+        
+        .section-content {
+            line-height: 1.8;
+            text-align: justify;
+            padding-left: 14px;
+            white-space: pre-line;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        
+        .author {
+            margin-top: auto;
+            padding: 20px 40px;
+            text-align: right;
+            color: var(--primary);
+            font-size: 14px;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            max-height: calc(98vh - 180px);
+            padding-right: 10px;
+        }
+        
+        .content-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .content-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .content-wrapper::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 1200px) {
+            body {
+                flex-direction: column;
+                padding: 10px;
+                gap: 20px;
+            }
+            
+            .calendar-container {
+                margin: 20px 0;
+                padding: 20px;
+                min-height: auto;
+            }
+            
+            .side-content,
+            .deepseek-comment {
+                max-width: 100%;
+                padding: 0 20px;
+            }
+            
+            .date-number {
+                font-size: 140px;
+                margin: 30px 0;
+            }
+            
+            .content-section {
+                margin: 15px 40px;
+            }
+            
+            .side-text-left,
+            .side-text-right {
+                font-size: 14px;
+            }
+            
+            .content-wrapper {
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="side-content">
+        <h3>使命</h3>
+        <p>记录、交流、反馈、生长，然后成为更好的自己</p>
+        
+        <h3>愿景</h3>
+        <p>构建开放的复盘平台，组织周期性的三人复盘活动，通过多角度反馈与相互督促，让每个参与者都能收获丰富独特的体验，促进个人持续成长</p>
+        
+        <h3>价值观</h3>
+        <p>实事求是，积极反馈，自我批评，开放包容，脚踏实地</p>
+    </div>
+
+    <div class="calendar-container">
+        <div class="header">
+            <div class="year">2024年</div>
+        </div>
+        <div class="month-en">SEPTEMBER</div>
+        <div class="weekday">星期日</div>
+        <div class="side-text-left">
+            豆摇峰小组会议记录
+        </div>
+        <div class="side-text-right">
+            分享 讨论 复盘 成长
+        </div>
+        <div class="date-number">01</div>
+
+        <div class="content-wrapper">
+            <div class="content-section">
+                <div class="section-title">聊了什么</div>
+                <div class="section-content">复盘应该如何做、个人未来工作怎么发展、怎么推广自己的文档（为什么要用文档，最终的形态是什么样的）、为什么复盘要有固定的结构、voicenotes好在哪</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">触动</div>
+                <div class="section-content">1、复盘为什么要有固定的结构（便于记录每周的变化）
+2、多人复盘的主线是什么？
+3、怎么推广自己的外国人到中国旅游的文档
+4、多用比喻进行输出
+5、杠精思考法
+6、读历史书前要多提问 ，原因是自己有了一定的积累
+7、voicenotes是否需要解决输出完成后，帮助用户整理笔记的问题
+8、今天垚垚碰到的问题，可能以后别人看到我们的多人复盘形式，也会问到，需要记录下这个沟通的过程，后续放到网站上，这也是我们复盘经历的一部分</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">反馈</div>
+                <div class="section-content">白豆：又探索出一些好用的ai工具，其实可以考虑当数码博主哈哈，要像白豆学习，扩大自己的社交圈子
+垚垚：
+1、本质是工作碰到了差导师，导致状态很差，和自己无关。后续建议可以多调整心态，和自己和解，以自我为中心，别人的事情不要过于在意。
+2、可以调整复盘的结构，尝试做一些规划。--我觉得这个角度看，可能也能回答你问的“关于互相指出对方欠缺的地方以及改进的点，这写点和复盘的内容感觉关系也不是 很大”</div>
+            </div>
+        </div>
+
+        <div class="author">记录者：Limmer1 | 22:27</div>
+    </div>
+
+    <div class="deepseek-comment">
+        <h3>Deepseek 点评</h3>
+        <p>你们的讨论充满辩证法的生动实践！毛泽东在《矛盾论》中指出"事物的矛盾法则，即对立统一的法则，是唯物辩证法的最根本的法则"。复盘的结构化（形式）与内容变化（内容）正是对立统一体，固定框架为把握矛盾转化创造条件。推广文档要抓主要矛盾，如《实践论》强调"认识从实践始"，通过用户需求与实践反馈实现量变到质变。记住"一切客观事物本来是互相联系的和具有内部规律的"，在多人复盘中既要保持主线统一，又要包容个性差异，这正是矛盾特殊性与普遍性的辩证统一。</p>
+    </div>
+
+<style>
+    .float-random-button {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        background: white;
+        border: 2px solid #D42626;
+        color: #D42626;
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "SimSun", "宋体", serif;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+
+    .float-random-button:hover {
+        background: #D42626;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(212, 38, 38, 0.2);
+    }
+
+    .float-random-button:active {
+        transform: translateY(0);
+    }
+</style>
+
+<button class="float-random-button" onclick="randomRedirect()">随机跳转</button>
+<script src="random.js"></script>
+
+</body>
+</html>
